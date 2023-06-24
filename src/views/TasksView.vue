@@ -1,0 +1,182 @@
+<template>
+  <div class="container">
+    <div class="content">
+      <div class="task-form">
+        <input class="task-input" type="text" placeholder="Enter tasks..." v-model="taskValue">
+        {{ taskValue }}
+        <button class="create-btn" @click="changed ? changeTask() : createTask()">{{ changed ? 'Change' : 'Create'
+        }}</button>
+      </div>
+      <div class=" tasks" v-if="test.length">
+        <div class="task-item" v-for="(task, i) in test" :key="i">
+          <div class="task-content-left">
+            <div class="task-title">{{ task.title }}</div>
+          </div>
+          <div class="task-content-right">
+            <button class="task-btn edit">
+              <img class="edit-icon" :src="editIcon" @click="changeTaskValue(task)" />
+            </button>
+            <button class="task-btn complite">
+              <img v-if="task.complite" class="tick" :src="tickComplite" @click="changeComplite(task)" />
+              <img v-else class="tick" :src="tick" @click="changeComplite(task)" />
+            </button>
+            <button class="task-btn delete">
+              <img class="delete-icon" :src="deleteIcon" @click="deleteTask(task)" />
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+
+/* eslint-disable */
+// import TickIcon from '../components/icons/tick.svg'
+
+export default {
+  name: 'TasksPage',
+  data() {
+    return {
+      tickComplite: require('../components/icons/tick-complite.svg'),
+      tick: require('../components/icons/tick.svg'),
+      deleteIcon: require('../components/icons/delete.svg'),
+      editIcon: require('../components/icons/edit.svg'),
+      taskValue: '',
+      taskIdChange: '',
+      changed: false,
+      test: this.$store.state
+    }
+  },
+  methods: {
+    changeComplite(task) {
+      task.complite = !task.complite
+      this.test = this.test.map((taskItem) => taskItem.id == task.id ? task : i)
+      this.$store.commit('localTask', this.test)
+    },
+    changeTaskValue(task) {
+      this.taskValue = task.title
+      this.taskIdChange = task.id
+      this.changed = true
+    },
+    changeTask() {
+      const task = {
+        title: this.taskValue,
+        id: this.taskIdChange,
+        complite: false
+      }
+      this.test = this.test.map((taskItem) => taskItem.id == this.taskIdChange ? task : i)
+      this.$store.commit('localTask', this.test)
+      this.changed = false
+      this.taskValue = ''
+    },
+    deleteTask(task) {
+      this.test = this.test.filter((taskItem) => taskItem.id !== task.id)
+      this.$store.commit('localTask', this.test)
+    },
+    createTask() {
+      if (!this.taskValue) {
+        return
+      }
+      const task = {
+        title: this.taskValue,
+        id: Date.now(),
+        complite: false
+      }
+      this.test.push(task)
+      this.$store.commit('localTask', this.test)
+      this.taskValue = ''
+    }
+  },
+};
+</script>
+
+<style>
+.tasks {
+  /* border: 1px solid black; */
+  width: 1000px;
+  margin: 0 auto;
+  padding: 6px 9px;
+}
+
+.task-item {
+  /* border: 1px solid green; */
+  padding: 5px 7px;
+  border-radius: 3px;
+  text-align: left;
+  display: flex;
+  background-color: white;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.task-title {
+  font-size: 18px;
+  color: rgba(17, 16, 16, 0.89);
+}
+
+.create-btn {
+  border: 0;
+  cursor: pointer;
+  color: white;
+  width: 65px;
+  padding: 4px 6px;
+  border-radius: 5px;
+  background-color: #ef513fc5;
+  box-shadow: 1px 1px 1px 1px #b6392cc5;
+}
+
+.create-btn:hover {
+  box-shadow: 1px 1px 1px 1px #74241bc5;
+}
+
+.task-content-right {
+  /* border: 1px solid black; */
+  justify-content: center;
+  width: 150px;
+  display: flex;
+  align-items: center;
+}
+
+.task-input {
+  width: 350px;
+  padding: 5px 8px;
+  margin: 10px auto;
+  border-radius: 3px;
+  background-color: #fed2d2;
+  border: none;
+  border-bottom: 1px solid black;
+  outline: none;
+}
+
+.task-btn {
+  background-color: white;
+  border: none;
+  /* border: 1px solid red; */
+  width: 45px;
+  height: 45px;
+}
+
+.task-content-left {
+  /* border: 1px solid black; */
+  width: 850px;
+}
+
+.tick {
+  width: 35px;
+  cursor: pointer;
+}
+
+.delete-icon {
+  cursor: pointer;
+  width: 25px;
+  padding-bottom: 1px;
+}
+
+.edit-icon {
+  cursor: pointer;
+  width: 22px;
+  padding-bottom: 1px;
+}
+</style>
