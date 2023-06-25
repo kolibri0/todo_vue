@@ -3,28 +3,12 @@
     <div class="content">
       <div class="task-form">
         <input class="task-input" type="text" placeholder="Enter tasks..." v-model="taskValue">
-        {{ taskValue }}
         <button class="create-btn" @click="changed ? changeTask() : createTask()">{{ changed ? 'Change' : 'Create'
         }}</button>
       </div>
-      <div class=" tasks" v-if="test.length">
-        <div class="task-item" v-for="(task, i) in test" :key="i">
-          <div class="task-content-left">
-            <div class="task-title">{{ task.title }}</div>
-          </div>
-          <div class="task-content-right">
-            <button class="task-btn edit">
-              <img class="edit-icon" :src="editIcon" @click="changeTaskValue(task)" />
-            </button>
-            <button class="task-btn complite">
-              <img v-if="task.complite" class="tick" :src="tickComplite" @click="changeComplite(task)" />
-              <img v-else class="tick" :src="tick" @click="changeComplite(task)" />
-            </button>
-            <button class="task-btn delete">
-              <img class="delete-icon" :src="deleteIcon" @click="deleteTask(task)" />
-            </button>
-          </div>
-        </div>
+      <div class="tasks" v-if="tasks.length">
+        <TaskItem v-for="task in tasks" :key="task.id" :task="task" @deleteTask="deleteTask"
+          @changeTaskValue="changeTaskValue" @changeComplite="changeComplite" :complite="task.complite" />
       </div>
     </div>
   </div>
@@ -34,9 +18,12 @@
 
 /* eslint-disable */
 // import TickIcon from '../components/icons/tick.svg'
-
+import TaskItem from '../components/taskItem.vue'
 export default {
   name: 'TasksPage',
+  components: {
+    TaskItem
+  },
   data() {
     return {
       tickComplite: require('../components/icons/tick-complite.svg'),
@@ -46,14 +33,14 @@ export default {
       taskValue: '',
       taskIdChange: '',
       changed: false,
-      test: this.$store.state
+      tasks: this.$store.state
     }
   },
   methods: {
     changeComplite(task) {
       task.complite = !task.complite
-      this.test = this.test.map((taskItem) => taskItem.id == task.id ? task : i)
-      this.$store.commit('localTask', this.test)
+      this.tasks = this.tasks.map((taskItem) => taskItem.id === task.id ? task : taskItem)
+      this.$store.commit('localTask', this.tasks)
     },
     changeTaskValue(task) {
       this.taskValue = task.title
@@ -66,14 +53,14 @@ export default {
         id: this.taskIdChange,
         complite: false
       }
-      this.test = this.test.map((taskItem) => taskItem.id == this.taskIdChange ? task : i)
-      this.$store.commit('localTask', this.test)
+      this.tasks = this.tasks.map((taskItem) => taskItem.id == this.taskIdChange ? task : taskItem)
+      this.$store.commit('localTask', this.tasks)
       this.changed = false
       this.taskValue = ''
     },
     deleteTask(task) {
-      this.test = this.test.filter((taskItem) => taskItem.id !== task.id)
-      this.$store.commit('localTask', this.test)
+      this.tasks = this.tasks.filter((taskItem) => taskItem.id !== task.id)
+      this.$store.commit('localTask', this.tasks)
     },
     createTask() {
       if (!this.taskValue) {
@@ -84,8 +71,8 @@ export default {
         id: Date.now(),
         complite: false
       }
-      this.test.push(task)
-      this.$store.commit('localTask', this.test)
+      this.tasks.push(task)
+      this.$store.commit('localTask', this.tasks)
       this.taskValue = ''
     }
   },
@@ -125,6 +112,7 @@ export default {
   border-radius: 5px;
   background-color: #ef513fc5;
   box-shadow: 1px 1px 1px 1px #b6392cc5;
+  margin-left: 10px;
 }
 
 .create-btn:hover {
