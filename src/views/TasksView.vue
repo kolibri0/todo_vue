@@ -71,7 +71,8 @@ export default {
         id: Date.now(),
         complite: false
       }
-      this.tasks.push(task)
+      // this.tasks.push(task)
+      this.tasks = [...this.tasks, task]
       this.$store.commit('localTask', this.tasks)
       this.taskValue = ''
     }
