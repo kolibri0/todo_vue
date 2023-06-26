@@ -1,6 +1,5 @@
 import Vue from 'vue'
-import Vuex, { mapMutations } from 'vuex'
-
+import Vuex, { mapMutations, mapGetters } from 'vuex'
 /* eslint-disable */
 Vue.use(Vuex)
 
@@ -8,7 +7,14 @@ const store = new Vuex.Store({
   state: {
     tasks: []
   },
-  getters: {},
+  getters: {
+    ...mapGetters([
+      'getTask'
+    ]),
+    getTask: (state) => {
+      return state
+    }
+  },
   mutations: {
     ...mapMutations([
       'localTask',
