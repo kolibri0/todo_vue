@@ -18,6 +18,8 @@ const store = new Vuex.Store({
         this.replaceState(
           Object.assign(state.tasks, JSON.parse(localStorage.getItem('tasks')))
         );
+      } else {
+        state.tasks = []
       }
     },
     localTask(state, newTasks) {
