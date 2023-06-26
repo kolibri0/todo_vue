@@ -33,7 +33,7 @@ export default {
       taskValue: '',
       taskIdChange: '',
       changed: false,
-      tasks: this.$store.state
+      tasks: Array(this.$store.state)
     }
   },
   methods: {
