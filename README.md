@@ -1,24 +1,14 @@
-# todo
+# Hi, this project was created to explore vue2
 
-## Project setup
-```
-npm install
-```
+## This project implements the ability to create, edit and delete tasks.
+## All tasks are stored in the localStorage.
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+'In this project were used:
+* HTML
+* CSS
+* Vue (version 2)
+* Vuex
+* Vue-router
 
-### Compiles and minifies for production
-```
-npm run build
-```
 
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+  
